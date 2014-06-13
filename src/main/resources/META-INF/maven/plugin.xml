@@ -1,0 +1,244 @@
+<plugin>
+  <description>
+    Triggers an external build process (such as MSBuild) appropriate for the
+    platform and then packages the resulting components
+  </description>
+  <groupId>uk.co.beerdragon</groupId>
+  <artifactId>maven-native-packaging</artifactId>
+  <version>PROJECT_VERSION</version>
+  <goalPrefix>native</goalPrefix>
+  <inheritedByDefault>true</inheritedByDefault>
+  <mojos>
+    <mojo>
+      <goal>build</goal>
+      <description>Triggers the external build (for example calling MSBuild)</description>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>compile</phase>
+      <implementation>uk.co.beerdragon.mvn.natives.BuildMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <parameters>
+        <parameter>
+          <name>skip</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Skip the build</description>
+        </parameter>
+        <parameter>
+          <name>defaults</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Configuration defaults for a platform</description>
+        </parameter>
+        <parameter>
+          <name>command</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Command to run to perform the build</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <skip>false</skip>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>package</goal>
+      <description>Packages one or more files</description>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>uk.co.beerdragon.mvn.natives.PackageMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <parameters>
+        <parameter>
+          <name>skip</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Skip the packaging</description>
+        </parameter>
+        <parameter>
+          <name>defaults</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Configuration defaults for a platform</description>
+        </parameter>
+        <parameter>
+          <name>sources</name>
+          <type>uk.co.beerdragon.mvn.natives.Source[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Files to be packaged</description>
+        </parameter>
+        <parameter>
+          <name>headerFiles</name>
+          <type>uk.co.beerdragon.mvn.natives.HeaderFile[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Header files to be packaged</description>
+        </parameter>
+        <parameter>
+          <name>staticLibs</name>
+          <type>uk.co.beerdragon.mvn.natives.StaticLib[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Static libraries to be packaged</description>
+        </parameter>
+        <parameter>
+          <name>dynamicLibs</name>
+          <type>uk.co.beerdragon.mvn.natives.DynamicLib[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Dynamic libraries to be packaged</description>
+        </parameter>
+        <parameter>
+          <name>executables</name>
+          <type>uk.co.beerdragon.mvn.natives.Executable[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Executables to be packaged</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <skip>false</skip>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>package-static</goal>
+      <description>Packages one or more static libraries (for example .LIB and .H files)</description>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>uk.co.beerdragon.mvn.natives.PackageStaticMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <parameters>
+        <parameter>
+          <name>skip</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Skip the packaging</description>
+        </parameter>
+        <parameter>
+          <name>defaults</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Configuration defaults for a platform</description>
+        </parameter>
+        <parameter>
+          <name>sources</name>
+          <type>uk.co.beerdragon.mvn.natives.Source[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Files to be packaged</description>
+        </parameter>
+        <parameter>
+          <name>staticLibs</name>
+          <type>uk.co.beerdragon.mvn.natives.StaticLib[]</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Static libraries to be packaged</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <skip>false</skip>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>package-dynamic</goal>
+      <description>Packages one or dynamic libraries (for example .DLL, .LIB (implib) and .H files)</description>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>uk.co.beerdragon.mvn.natives.PackageDynamicMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <parameters>
+        <parameter>
+          <name>skip</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Skip the packaging</description>
+        </parameter>
+        <parameter>
+          <name>defaults</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Configuration defaults for a platform</description>
+        </parameter>
+        <parameter>
+          <name>sources</name>
+          <type>uk.co.beerdragon.mvn.natives.Source[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Files to be packaged</description>
+        </parameter>
+        <parameter>
+          <name>dynamicLibs</name>
+          <type>uk.co.beerdragon.mvn.natives.DynamicLib[]</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Dynamic libraries to be packaged</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <skip>false</skip>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>package-exec</goal>
+      <description>Packages one or more executables (for example .EXE files)</description>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>package</phase>
+      <implementation>uk.co.beerdragon.mvn.natives.PackageExecMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <parameters>
+        <parameter>
+          <name>skip</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Skip the packaging</description>
+        </parameter>
+        <parameter>
+          <name>defaults</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Configuration defaults for a platform</description>
+        </parameter>
+        <parameter>
+          <name>sources</name>
+          <type>uk.co.beerdragon.mvn.natives.Source[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Files to be packaged</description>
+        </parameter>
+        <parameter>
+          <name>executables</name>
+          <type>uk.co.beerdragon.mvn.natives.Executable[]</type>
+          <required>true</required>
+          <editable>true</editable>
+          <description>Executables to be packaged</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <skip>false</skip>
+      </configuration>
+    </mojo>
+  </mojos>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>COMMONS_LANG3_VERSION</version>
+    </dependency>
+  </dependencies>
+</plugin>
