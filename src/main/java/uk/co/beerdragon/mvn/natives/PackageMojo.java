@@ -307,14 +307,7 @@ public class PackageMojo extends AbstractMojo {
     } catch (final IOException e) {
       throw new MojoFailureException ("Can't write to " + targetFile);
     }
-    final IOExceptionHandler errorLog = new IOExceptionHandler () {
-
-      @Override
-      public void exception (final IOException e) {
-        getLog ().error (e);
-      }
-
-    };
+    final IOExceptionHandler errorLog = new MojoLoggingErrorCallback (this);
     if ((new IOCallback<OutputStream, Boolean> (output) {
 
       @Override

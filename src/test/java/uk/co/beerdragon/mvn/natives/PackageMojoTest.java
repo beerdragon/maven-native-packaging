@@ -212,6 +212,25 @@ public class PackageMojoTest {
     instance.execute ();
   }
 
+  public void testEmptySourceDir () throws Exception {
+    final PackageMojo instance = new PackageMojo ();
+    final Source empty = new Source ();
+    empty.setPath ("missing-folder");
+    empty.setPattern ("*");
+    instance.setSources (new Source[] { empty });
+    instance.setLog (Mockito.mock (Log.class));
+    final MavenProject project = new MavenProject ();
+    project.setArtifactId ("test");
+    project.getBuild ().setDirectory ("target");
+    project.setArtifact (Mockito.mock (Artifact.class));
+    instance.setPluginContext (Collections.singletonMap ("project", project));
+    final OutputStreamOpener outputStreams = Mockito.mock (OutputStreamOpener.class);
+    Mockito.when (outputStreams.open (new File ("target/test.zip"))).thenReturn (
+        new ByteArrayOutputStream ());
+    instance.setOutputStreams (outputStreams);
+    instance.execute ();
+  }
+
   @Test (expectedExceptions = MojoFailureException.class)
   public void testCantReadFromSource () throws Exception {
     final PackageMojo instance = new PackageMojo ();
