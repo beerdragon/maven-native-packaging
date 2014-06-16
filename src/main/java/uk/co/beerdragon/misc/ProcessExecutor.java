@@ -7,10 +7,8 @@
 
 package uk.co.beerdragon.misc;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -20,7 +18,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class ProcessExecutor {
 
-  private static class ExceptionFuture<T> implements Future<T> {
+  private static class ExceptionFuture implements Future<Integer> {
 
     private final Exception _exception;
 
@@ -44,15 +42,57 @@ public class ProcessExecutor {
     }
 
     @Override
-    public T get () throws InterruptedException, ExecutionException {
+    public Integer get () throws InterruptedException, ExecutionException {
       throw new ExecutionException (_exception);
     }
 
     @Override
-    public T get (final long timeout, final TimeUnit unit) throws InterruptedException,
+    public Integer get (final long timeout, final TimeUnit unit) throws InterruptedException,
         ExecutionException, TimeoutException {
       throw new ExecutionException (_exception);
     }
+
+  }
+
+  private static class ProcessFuture implements Future<Integer> {
+
+    private final Process _process;
+
+    public ProcessFuture (final Process process) {
+      _process = process;
+    }
+
+    @Override
+    public boolean cancel (final boolean mayInterruptIfRunning) {
+      throw new UnsupportedOperationException ("TODO");
+    }
+
+    @Override
+    public boolean isCancelled () {
+      return false;
+    }
+
+    @Override
+    public boolean isDone () {
+      try {
+        _process.exitValue ();
+      } catch (final IllegalThreadStateException e) {
+        return false;
+      }
+      return true;
+    }
+
+    @Override
+    public Integer get () throws InterruptedException, ExecutionException {
+      return _process.waitFor ();
+    }
+
+    @Override
+    public Integer get (final long timeout, final TimeUnit unit) throws InterruptedException,
+        ExecutionException, TimeoutException {
+      throw new UnsupportedOperationException ("TODO");
+    }
+
   }
 
   /**
@@ -66,16 +106,9 @@ public class ProcessExecutor {
   public Future<Integer> exec (final String command) {
     try {
       final Process process = Runtime.getRuntime ().exec (command);
-      return new FutureTask<Integer> (new Callable<Integer> () {
-
-        @Override
-        public Integer call () throws Exception {
-          return process.waitFor ();
-        }
-
-      });
+      return new ProcessFuture (process);
     } catch (final Exception e) {
-      return new ExceptionFuture<Integer> (e);
+      return new ExceptionFuture (e);
     }
   }
 
