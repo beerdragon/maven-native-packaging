@@ -151,6 +151,9 @@ public class PackageStaticMojoTest {
     final File file = File.createTempFile ("test", ".zip");
     try {
       final PackageStaticMojo instance = executeInstance (file);
+      instance.applyDefaults ();
+      instance.getStaticLibs ()[0].getHeaders ()[1].setDest ("i386");
+      instance.getStaticLibs ()[1].getHeaders ()[1].setDest ("x64");
       instance.execute ();
       assertNotNull ((new IOCallback<InputStream, Boolean> (new FileInputStream (file)) {
 
@@ -162,8 +165,8 @@ public class PackageStaticMojoTest {
           while ((entry = zip.getNextEntry ()) != null) {
             files.add (entry.getName ());
           }
-          assertEquals (files, ImmutableSet.of ("include/5.h", "lib-i386/6.lib", "include/6.h",
-              "lib-x64/7.lib", "include/7.h"));
+          assertEquals (files, ImmutableSet.of ("include/5.h", "lib-i386/6.lib",
+              "include/i386/6.h", "lib-x64/7.lib", "include/x64/7.h"));
           return Boolean.TRUE;
         }
 

@@ -194,25 +194,25 @@ public class PackageMojo extends AbstractMojo {
       }
     }
 
-    private static String path (final String path) {
-      if (path.length () > 0) {
-        return path + File.separatorChar;
-      } else {
-        return path;
+    private void storePath (final Source source, String path) {
+      if (path.length () > 0) path = path + "/";
+      if (source.getDest () != null) {
+        path = path + source.getDest () + "/";
       }
+      _found.put (source, path);
     }
 
     @Override
     protected void visitSource (final Source source) {
       source.setPath (ObjectUtils.defaultIfNull (source.getPath (), _path));
-      _found.put (source, "");
+      storePath (source, "");
     }
 
     @Override
     protected void visitArchSource (final ArchSource source) {
       source.setArch (ObjectUtils.defaultIfNull (source.getArch (), _arch));
       super.visitArchSource (source);
-      _found.put (source, path (getArchLabel (source)));
+      storePath (source, getArchLabel (source));
     }
 
     @Override
@@ -221,7 +221,7 @@ public class PackageMojo extends AbstractMojo {
       nested.applyTo (library.getHeaders ());
       nested.applyTo (library.getImplibs ());
       super.visitDynamicLib (library);
-      _found.put (library, path ("bin" + getArchSuffix (library)));
+      storePath (library, "bin" + getArchSuffix (library));
     }
 
     @Override
@@ -230,7 +230,7 @@ public class PackageMojo extends AbstractMojo {
       nested.applyTo (executable.getHeaders ());
       nested.applyTo (executable.getLibraries ());
       super.visitExecutable (executable);
-      _found.put (executable, path ("bin" + getArchSuffix (executable)));
+      storePath (executable, "bin" + getArchSuffix (executable));
     }
 
     @Override
@@ -238,13 +238,13 @@ public class PackageMojo extends AbstractMojo {
       final SourceVisitor nested = new SourceGatherer (this, library);
       nested.applyTo (library.getHeaders ());
       super.visitStaticLib (library);
-      _found.put (library, path ("lib" + getArchSuffix (library)));
+      storePath (library, "lib" + getArchSuffix (library));
     }
 
     @Override
     protected void visitHeaderFile (final HeaderFile header) {
       super.visitHeaderFile (header);
-      _found.put (header, path ("include"));
+      storePath (header, "include");
     }
 
   }

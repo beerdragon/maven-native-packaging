@@ -25,8 +25,10 @@ public class HeaderFileTest {
   public void testExplicit () {
     final HeaderFile file = new HeaderFile ();
     file.setPath ("foo");
+    file.setDest ("sys");
     file.setPattern ("*.inc");
     assertEquals (file.getPath (), "foo");
+    assertEquals (file.getDest (), "sys");
     assertEquals (file.getPattern (), "*.inc");
   }
 
@@ -44,6 +46,14 @@ public class HeaderFileTest {
     final HeaderFile a = new HeaderFile ();
     final HeaderFile b = new HeaderFile ();
     b.setPath ("foo");
+    assertFalse (a.equals (b));
+    assertFalse (b.equals (a));
+  }
+
+  public void testInequality_dest () {
+    final HeaderFile a = new HeaderFile ();
+    final HeaderFile b = new HeaderFile ();
+    b.setDest ("foo");
     assertFalse (a.equals (b));
     assertFalse (b.equals (a));
   }

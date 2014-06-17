@@ -20,6 +20,12 @@ public class Source {
   private String _path;
 
   /**
+   * Path hint for the files in the resulting package, for example <code>sys</code> for a header
+   * file source would result in the files being packaged as <code>include/sys</code>.
+   */
+  private String _dest;
+
+  /**
    * Pattern selecting files to be packaged, for example <code>*.so</code>.
    */
   private String _pattern;
@@ -42,6 +48,27 @@ public class Source {
    */
   public void setPath (final String path) {
     _path = path;
+  }
+
+  /**
+   * Returns the path hint for the resulting location in the package, for example <code>sys</code>
+   * for a header file source to put it in <code>include/sys</code>.
+   * 
+   * @return the path hint, or {@code null} for the default location
+   */
+  public String getDest () {
+    return _dest;
+  }
+
+  /**
+   * Sets the path hint for the resulting location in the package, for example <code>sys</code> for
+   * a header file source to put it in <code>include/sys</code>.
+   * 
+   * @param dest
+   *          the path hint, or {@code null} for the default location
+   */
+  public void setDest (final String dest) {
+    _dest = dest;
   }
 
   /**
@@ -75,6 +102,7 @@ public class Source {
   /* package */boolean equalsImpl (final Object o) {
     final Source other = (Source)o;
     return Objects.equals (getPath (), other.getPath ())
+        && Objects.equals (getDest (), other.getDest ())
         && Objects.equals (getPattern (), other.getPattern ());
   }
 
@@ -107,7 +135,7 @@ public class Source {
 
   @Override
   public int hashCode () {
-    return Objects.hash (getClass (), getPath (), getPattern ());
+    return Objects.hash (getClass (), getPath (), getDest (), getPattern ());
   }
 
   @Override
