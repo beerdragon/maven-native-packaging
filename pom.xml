@@ -20,7 +20,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <commons-lang3.version>3.2.1</commons-lang3.version>
-    <helpers.version>0.1.0</helpers.version>
+    <helpers.version>0.1.1</helpers.version>
     <jacoco-maven-plugin.version>0.7.0.201403182114</jacoco-maven-plugin.version>
     <java.version>1.7</java.version>
     <maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>

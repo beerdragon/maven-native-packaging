@@ -17,7 +17,7 @@ import org.apache.commons.lang3.ObjectUtils;
  * <p>
  * A pattern along the lines of:
  * 
- * <pre class="code">
+ * <pre class="java code">
  * <span class="i">Result foo</span> (<span class="i">parameters</span> ...) {
  *   <span class="k">try</span> (<span class="i">Resource x</span> = <span class="k">new</span> <span class="i">ResourceAllocation</span> (<span class="i">parameters</span>)) {
  *     <span class="c">// do something with x to create result ...</span>
@@ -30,7 +30,7 @@ import org.apache.commons.lang3.ObjectUtils;
  * </pre>
  * Can be re-written as:
  * 
- * <pre class="code">
+ * <pre class="java code">
  * <span class="i">Result foo</span> (<span class="i">parameters</span> ...) {
  *   <span class="k">return</span> (<span class="k">new</span> <span class="i">IOCallback</span> (<span class="k">new</span> <span class="i">ResourceAllocation</span> (<span class="i">parameters</span>)) {
  *     <span class="k">protected</span> <span class="i">Result apply</span> (<span class="i">Resource x</span>) <span class="k">throws</span> <span class="i">IOException</span> {
