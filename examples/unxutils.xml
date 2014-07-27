@@ -1,1 +1,62 @@
-../../unxutils/pom.xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>net.sourceforge.unxutils</groupId>
+  <artifactId>win32</artifactId>
+  <version>3.10.23</version>
+  <packaging>native-exec</packaging>
+
+  <name>GNU Utilities for Win32</name>
+  <description>Maven bundling of the unxutils.sourceforge.net executables</description>
+
+  <licenses>
+    <license>
+      <name>GNU General Public License, Version 3.0</name>
+      <url>http://www.gnu.org/licenses/gpl.txt</url>
+    </license>
+  </licenses>
+
+  <properties>
+    <maven-native-packing.version>0.2.0</maven-native-packing.version>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>uk.co.beerdragon</groupId>
+        <artifactId>maven-native-packaging</artifactId>
+        <version>${maven-native-packing.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <defaults>windows</defaults>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default-build</id>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </execution>
+          <execution>
+            <id>default-package-exec</id>
+            <configuration>
+              <executables>
+                <executable>
+                  <path>UnxUtils/usr/local/wbin</path>
+                </executable>
+              </executables>
+              <sources>
+                <source>
+                  <path>UnxUtils</path>
+                  <pattern>*.html</pattern>
+                </source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

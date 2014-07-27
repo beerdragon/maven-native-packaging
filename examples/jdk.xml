@@ -1,1 +1,97 @@
-../../jdk/pom.xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.oracle.jdk</groupId>
+  <artifactId>win32</artifactId>
+  <version>1.7.0</version>
+  <packaging>native-static</packaging>
+
+  <name>JNI Development Kit</name>
+  <description>Header files and libraries for using native code with Java</description>
+
+  <licenses>
+    <license>
+      <name>Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX</name>
+      <url>http://java.sun/license</url>
+    </license>
+  </licenses>
+
+  <properties>
+    <maven-native-packing.version>0.2.0</maven-native-packing.version>
+    <java.i386.build>51</java.i386.build>
+    <java.x64.build>51</java.x64.build>
+    <java.i386.path>C:\Program Files (x86)\Java\jdk${project.version}_${java.i386.build}</java.i386.path>
+    <java.x64.path>C:\Program Files\Java\jdk${project.version}_${java.x64.build}</java.x64.path>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>uk.co.beerdragon</groupId>
+        <artifactId>maven-native-packaging</artifactId>
+        <version>${maven-native-packing.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <defaults>windows</defaults>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default-build</id>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </execution>
+          <execution>
+            <id>default-package-static</id>
+            <configuration>
+              <sources>
+                <source>
+                  <path>${java.i386.path}</path>
+                  <pattern>LICENSE</pattern>
+                </source>
+                <source>
+                  <path>${java.i386.path}</path>
+                  <pattern>README.html</pattern>
+                </source>
+                <source>
+                  <path>${java.i386.path}</path>
+                  <pattern>COPYRIGHT</pattern>
+                </source>
+                <source>
+                  <path>${java.i386.path}</path>
+                  <pattern>THIRDPARTYLICENSEREADME*</pattern>
+                </source>
+              </sources>
+              <staticLibs>
+                <staticLib>
+                  <arch>i386</arch>
+                  <path>${java.i386.path}/lib</path>
+                  <headers>
+                    <header>
+                      <path>${java.i386.path}/include</path>
+                    </header>
+                    <header>
+                      <path>${java.i386.path}/include/win32</path>
+                      <dest>win32</dest>
+                    </header>
+                    <header>
+                      <path>${java.i386.path}/include/win32/bridge</path>
+                      <dest>win32/bridge</dest>
+                    </header>
+                  </headers>
+                </staticLib>
+                <staticLib>
+                  <arch>x64</arch>
+                  <path>${java.x64.path}/lib</path>
+                  <headers/>
+                </staticLib>
+              </staticLibs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
